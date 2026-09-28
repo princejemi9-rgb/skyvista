@@ -1,0 +1,35 @@
+import type { Flight, PriceBreakdown, BookingInput } from "./flights";
+export type Booking = {
+  id: string;
+  user_id: string;
+  reference: string;
+  status: "pending" | "test_confirmed" | "cancelled";
+  source: "simulated";
+  total: number;
+  currency: "NGN";
+  price: PriceBreakdown;
+  flights: Flight[];
+  passengers: BookingInput["passengers"];
+  seats: string[][];
+  bags: number[];
+  email: string;
+  phone: string;
+  created_at: string;
+  promo: string;
+  payment_status?: "unpaid" | "pending" | "awaiting_verification" | "paid" | "rejected" | "refunded" | "failed";
+  booking_status?: "pending" | "payment_pending" | "confirmed" | "cancelled" | "completed";
+  admin_notes?: string;
+};
+export type Transaction = {
+  id: string;
+  booking_id: string;
+  reference: string;
+  status: "initializing" | "pending" | "failed" | "success";
+  amount: number;
+  currency: "NGN";
+  domain: "test";
+  authorization_url: string | null;
+  provider_id: string | null;
+  created_at: string;
+  verified_at: string | null;
+};

@@ -1,0 +1,6 @@
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { requireAdmin,serviceClient } from '@/lib/supabase/server';
+import { checkOrigin,errorResponse } from '@/lib/server/http';
+const schema=z.object({adminNotes:z.string().max(5000),bookingStatus:z.enum(['pending','payment_pending','confirmed','cancelled','completed'])});
+export async function POST(request:Request,{params}:{params:Promise<{id:string}>}){try{checkOrigin(request);const {user}=await requireAdmin();const {id}=await params;const body=schema.parse(await request.json());const db=serviceClient();const {data:booking}=await db.from('bookings').select('id,payment_status').eq('id',id).single();if(!booking)throw new Error('Booking not found.');if(body.bookingStatus==='confirmed'&&booking.payment_status!=='paid')throw new Error('Only a paid booking can be confirmed.');const {error}=await db.from('bookings').update({admin_notes:body.adminNotes,booking_status:body.bookingStatus}).eq('id',id);if(error)throw new Error('Booking update failed.');await db.from('admin_audit_logs').insert({admin_id:user.id,action:'booking_updated',entity_type:'booking',entity_id:id,detail:{booking_status:body.bookingStatus}});return NextResponse.json({saved:true});}catch(e){return errorResponse(e);}}
