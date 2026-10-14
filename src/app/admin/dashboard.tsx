@@ -8,6 +8,7 @@ type Profile = {
   id: string;
   full_name: string;
   phone: string;
+  country: string;
   role: string;
   created_at: string;
 };
@@ -191,6 +192,7 @@ export function AdminDashboard() {
                   id: p.id,
                   full_name: f.get("name"),
                   phone: f.get("phone"),
+                  country: f.get("country"),
                 });
               }}
             >
@@ -207,6 +209,10 @@ export function AdminDashboard() {
               <label className="field" style={{ flex: 1, margin: 0 }}>
                 Phone
                 <input name="phone" defaultValue={p.phone} maxLength={25} />
+              </label>
+              <label className="field" style={{ flex: 1, margin: 0 }}>
+                Country
+                <input name="country" defaultValue={p.country} maxLength={100} />
               </label>
               <span className="badge">{p.role}</span>
               <button className="btn btn-small" disabled={busy}>

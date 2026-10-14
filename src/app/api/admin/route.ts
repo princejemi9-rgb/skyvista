@@ -46,6 +46,7 @@ const schemas = {
     id: z.uuid(),
     full_name: z.string().min(2).max(100),
     phone: z.string().max(25),
+    country: z.string().max(100),
   }),
   payment_methods: z.object({id:z.enum(["paystack","bank_transfer","bitcoin"]),display_name:z.string().min(2).max(60),enabled:z.boolean(),instructions:z.string().max(3000),display_order:z.number().int().min(0).max(100)}),
   bank_accounts: z.object({id:z.uuid().optional(),bank_name:z.string().min(2).max(120),account_name:z.string().min(2).max(120),account_number:z.string().regex(/^[A-Za-z0-9 -]{5,40}$/),currency:z.string().regex(/^[A-Z]{3}$/),routing_information:z.string().max(240),instructions:z.string().max(3000),enabled:z.boolean(),display_order:z.number().int().min(0).max(100)}),
@@ -120,6 +121,7 @@ export async function POST(request: Request) {
             .update({
               full_name: (record as { full_name: string }).full_name,
               phone: (record as { phone: string }).phone,
+              country: (record as { country: string }).country,
             })
             .eq("id", record.id)
         : body.table === "payment_methods" ||

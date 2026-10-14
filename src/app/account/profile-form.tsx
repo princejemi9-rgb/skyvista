@@ -5,10 +5,12 @@ import { browserClient } from "@/lib/supabase/browser";
 export function ProfileForm({
   name,
   phone,
+  country,
   email,
 }: {
   name: string;
   phone: string;
+  country: string;
   email: string;
 }) {
   const [message, setMessage] = useState(""),
@@ -31,6 +33,7 @@ export function ProfileForm({
         .update({
           full_name: String(form.get("name")).trim(),
           phone: String(form.get("phone")).trim(),
+          country: String(form.get("country")).trim(),
         })
         .eq("id", user.id);
       if (error) throw error;
@@ -69,6 +72,10 @@ export function ProfileForm({
         <label className="field">
           Phone number
           <input name="phone" type="tel" defaultValue={phone} maxLength={25} />
+        </label>
+        <label className="field">
+          Country of residence
+          <input name="country" defaultValue={country} maxLength={100} />
         </label>
         <button className="btn full-width" disabled={busy}>
           {busy ? "Saving…" : "Save changes"}

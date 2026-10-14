@@ -2039,6 +2039,11 @@ table select {
 .account-security h3 { margin: 0 0 2px; font-size: 15px; color: var(--navy); }
 .account-link { display: inline-flex; align-items: center; gap: 7px; color: inherit; font-weight: 700; font-size: 13px; }
 .payment-qr { display: block; width: min(100%, 260px); height: auto; margin: 16px auto; padding: 10px; border: 1px solid #dbe8f4; border-radius: 12px; background: white; }
+.auth-premium { max-width: 920px; margin: 20px auto; display: grid; grid-template-columns: .9fr 1.1fr; gap: 54px; align-items: center; }
+.auth-intro { color: var(--navy); } .auth-intro > svg { color: var(--blue); margin-bottom: 20px; } .auth-intro h1 { margin: 8px 0 14px; } .auth-intro p { max-width: 390px; }
+.auth-card { padding: 34px; box-shadow: 0 20px 55px rgba(11,45,75,.10); } .password-field { position: relative; } .password-field input { padding-right: 48px; } .password-field button { position:absolute; right:8px; top:50%; transform:translateY(-50%); border:0; background:transparent; color:var(--blue); display:grid; place-items:center; cursor:pointer; }
+.auth-consent { display:flex; align-items:flex-start; gap:9px; font-size:13px; line-height:1.45; margin:18px 0; } .auth-consent input { margin-top:3px; }
+@media (max-width:760px){.auth-premium{grid-template-columns:1fr;gap:22px;margin:0 auto}.auth-card{padding:24px}.auth-intro h1{font-size:32px}}
 @media (max-width: 760px) { .account-layout { grid-template-columns: 1fr; gap: 20px; } .account-section-heading { align-items: flex-start; } .booking-panel { padding: 8px 18px; } .booking-meta { font-size: 12px; } .account-empty-state { min-height: 240px; } .account-link span { max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
 @media (prefers-reduced-motion: reduce) {
   html {

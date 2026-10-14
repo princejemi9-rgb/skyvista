@@ -27,7 +27,7 @@ export default async function Account() {
         <div className="account-section-heading"><div><p className="eyebrow blue">ACCOUNT OVERVIEW</p><h2>Upcoming trips</h2></div><Link className="text-link" href="/flights">Find a flight</Link></div>
         {!savedBookings.length ? <div className="empty-state account-empty-state"><span className="empty-state-icon"><PlaneTakeoff size={28} /></span><h3>A fresh page for your next story.</h3><p>When you save a journey, your itinerary and payment progress will appear here.</p><Link className="btn" href="/flights">Find a flight</Link></div> : <section className="panel booking-panel"><div className="account-section-heading compact"><div><Ticket size={19} /><h2>My bookings</h2></div><span>{savedBookings.length} saved</span></div>{savedBookings.map((booking) => <article className="booking-row" key={booking.id}><div><span className={`badge ${booking.status === "test_confirmed" ? "green" : "amber"}`}>{booking.status === "test_confirmed" ? "Test payment verified" : booking.status === "cancelled" ? "Cancelled" : "Awaiting test payment"}</span><h3>{booking.flights.map((flight) => `${flight.from} → ${flight.to}`).join(" · ")}</h3><p className="booking-meta"><Ticket size={14} /> {booking.reference} <span>•</span> <CalendarDays size={14} /> {booking.flights[0].date} <span>•</span> {money(booking.total)}</p></div><Link className="btn btn-outline btn-small" href={`/bookings/${booking.id}`}>View booking</Link></article>)}</section>}
       </section>
-      <ProfileForm name={profile?.full_name ?? ""} phone={profile?.phone ?? ""} email={user.email ?? ""} />
+      <ProfileForm name={profile?.full_name ?? ""} phone={profile?.phone ?? ""} country={profile?.country ?? ""} email={user.email ?? ""} />
     </div>
   </div>;
 }
