@@ -18,24 +18,35 @@ export async function getContent() {
   await connection();
   if (!isConfigured())
     return { destinations, offers, settings: defaultSettings };
-  const db = await serverClient();
-  const [d, o, s] = await Promise.all([
-    db.from("destinations").select("*").eq("active", true).order("id"),
-    db.from("offers").select("*").eq("active", true),
-    db.from("settings").select("value").eq("id", "website").single(),
-  ]);
-  if (d.error || o.error || s.error)
-    throw new Error("Unable to load website content.");
-  return {
-    destinations: d.data as Destination[],
-    offers: o.data as Offer[],
-    settings: s.data.value as Settings,
-  };
+  try {
+    const db = await serverClient();
+    const [d, o, s] = await Promise.all([
+      db.from("destinations").select("*").eq("active", true).order("id"),
+      db.from("offers").select("*").eq("active", true),
+      db.from("settings").select("value").eq("id", "website").single(),
+    ]);
+    if (d.error || o.error || s.error || !s.data) {
+      throw new Error("Public website content is unavailable.");
+    }
+    return {
+      destinations: d.data as Destination[],
+      offers: o.data as Offer[],
+      settings: s.data.value as Settings,
+    };
+  } catch (error) {
+    console.error("SkyVista public content fallback", error);
+    return { destinations, offers, settings: defaultSettings };
+  }
 }
 export async function getProvider() {
   if (!isConfigured()) return new SeededFlightProvider(defaultInventory);
-  const db = await serverClient();
-  const { data, error } = await db.from("inventory").select("*");
-  if (error) throw new Error("Flight search is temporarily unavailable.");
-  return new SeededFlightProvider(data as InventoryRule[]);
+  try {
+    const db = await serverClient();
+    const { data, error } = await db.from("inventory").select("*");
+    if (error || !data) throw new Error("Flight inventory is unavailable.");
+    return new SeededFlightProvider(data as InventoryRule[]);
+  } catch (error) {
+    console.error("SkyVista inventory fallback", error);
+    return new SeededFlightProvider(defaultInventory);
+  }
 }
