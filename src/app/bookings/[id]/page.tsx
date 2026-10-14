@@ -33,10 +33,11 @@ export default async function BookingPage({
     .select("*")
     .eq("booking_id", id)
     .maybeSingle();
-  const [{ data: methods }, { data: accounts }, { data: crypto }] = await Promise.all([
+  const [{ data: methods }, { data: accounts }, { data: crypto }, { data: wallets }] = await Promise.all([
     auth.db.from("payment_methods").select("id,display_name,instructions,display_order").eq("enabled", true).order("display_order"),
     auth.db.from("bank_accounts").select("id,bank_name,account_name,account_number,currency,instructions").eq("enabled", true).order("display_order"),
     auth.db.from("crypto_payment_settings").select("display_name,wallet_address,network,instructions").eq("id", "bitcoin").maybeSingle(),
+    auth.db.from("bitcoin_wallets").select("id,display_name,wallet_address,network,instructions").eq("enabled", true).order("display_order"),
   ]);
   const confirmed = booking.status === "test_confirmed" || booking.payment_status === "paid";
   return (
@@ -132,6 +133,7 @@ export default async function BookingPage({
               methods={methods ?? []}
               accounts={accounts ?? []}
               crypto={crypto ?? null}
+              wallets={wallets ?? []}
             />
           )}
         </aside>

@@ -2038,6 +2038,7 @@ table select {
 .account-security { display: grid; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e5edf4; }
 .account-security h3 { margin: 0 0 2px; font-size: 15px; color: var(--navy); }
 .account-link { display: inline-flex; align-items: center; gap: 7px; color: inherit; font-weight: 700; font-size: 13px; }
+.payment-qr { display: block; width: min(100%, 260px); height: auto; margin: 16px auto; padding: 10px; border: 1px solid #dbe8f4; border-radius: 12px; background: white; }
 @media (max-width: 760px) { .account-layout { grid-template-columns: 1fr; gap: 20px; } .account-section-heading { align-items: flex-start; } .booking-panel { padding: 8px 18px; } .booking-meta { font-size: 12px; } .account-empty-state { min-height: 240px; } .account-link span { max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
 @media (prefers-reduced-motion: reduce) {
   html {
