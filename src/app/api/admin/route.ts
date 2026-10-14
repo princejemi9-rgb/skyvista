@@ -80,7 +80,16 @@ export async function GET() {
         return [table, data];
       }),
     );
-    return NextResponse.json(Object.fromEntries(result));
+    const data = Object.fromEntries(result) as Record<string, unknown>;
+    const { data: authUsers, error: authError } = await db.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    if (authError) throw new Error("Unable to load customer directory.");
+    const profiles = (data.profiles as { id: string; full_name: string; phone: string; country?: string; role: string; created_at: string }[]) ?? [];
+    const bookings = (data.bookings as { user_id: string }[]) ?? [];
+    data.customers = profiles.map((profile) => {
+      const auth = authUsers.users.find((user) => user.id === profile.id);
+      return { ...profile, email: auth?.email ?? "", account_status: auth?.banned_until ? "suspended" : "active", booking_count: bookings.filter((booking) => booking.user_id === profile.id).length };
+    });
+    return NextResponse.json(data);
   } catch (e) {
     return errorResponse(e);
   }

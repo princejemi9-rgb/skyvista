@@ -14,6 +14,7 @@ type Profile = {
 };
 type Data = {
   profiles: Profile[];
+  customers:(Profile&{email:string;account_status:string;booking_count:number})[];
   bookings: Booking[];
   transactions: Transaction[];
   inventory: InventoryRule[];
@@ -180,7 +181,7 @@ export function AdminDashboard() {
       )}
       {tab === "Customers" && (
         <div className="panel">
-          {data.profiles.filter(matches).map((p) => (
+          {data.customers.filter(matches).map((p) => (
             <form
               className="row"
               key={p.id}
@@ -206,6 +207,7 @@ export function AdminDashboard() {
                   required
                 />
               </label>
+              <div className="field" style={{ flex: 1, margin: 0 }}><span>Email</span><p className="profile-email">{p.email || "Unavailable"}</p><small className="muted">{p.booking_count} booking(s) · {p.account_status}</small></div>
               <label className="field" style={{ flex: 1, margin: 0 }}>
                 Phone
                 <input name="phone" defaultValue={p.phone} maxLength={25} />
